@@ -15,14 +15,14 @@ class Submit extends Component {
   //ie browser will attempt to load url and display it in address bar
   submitHandler = (ev, url, setters)=> {
     ev.preventDefault();
-    // fetch (url, {headers: headers})
-    //   .then (response => {
-    //     console.log('body:',response.body);
-    //       return response.json();
-    //
-    //   })
-    //   .then (this.setter || setters.onSuccess)
-    //   .catch (setters.onPostRequestFail)
+    fetch (url, {headers: headers})
+      .then (response => {
+        console.log('body:',response.body);
+          return response.json();
+
+      })
+      .then (this.setter || setters.onSuccess)
+      .catch (setters.onPostRequestFail)
   }
 
   render() {
@@ -34,7 +34,7 @@ class Submit extends Component {
         className = {clickable ? "submit-button clickable" : "submit-button"}
         onClick = {
           clickable ?
-            (ev) => {this.submitHandler (ev, this.props.action+this.props.data, this.props.setters)} :
+            (ev) => {this.submitHandler (ev, this.props.action+this.props.query, this.props.setters)} :
             this.props.nag
         }>
       </input>

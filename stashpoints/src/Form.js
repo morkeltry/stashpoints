@@ -72,15 +72,15 @@ class Form extends Component {
     let dataQueryString = '';
 console.log(formData);
     this.formFields.forEach (field => {
-console.log('trying field',field);
+console.log('trying field',field[1]);
       if (formData[field[1]+'value']) {
         console.log(formData[field[1]+'value']);
         dataObj[field[1]] = formData[field[1]+'value'];
-        dataQueryString += "&"+field+formData[field[1]+'value'];
+        dataQueryString += `&${field[1]}=${formData[field[1]+'value']}`;
 
       }
     });
-console.log('postable currently =',dataQueryString) //.replace('&','?'));
+console.log('postable currently =',dataQueryString.replace('&','?'));
     return dataQueryString.replace('&','?');
     // return JSON.stringify(dataObj);
   }
@@ -115,7 +115,7 @@ console.log('postable currently =',dataQueryString) //.replace('&','?'));
         <Submit
           title = 'Do Submit'
           action = {getUrl}
-          data = {this.bundleData(this.state.formData)}
+          query = {this.bundleData(this.state.formData)}
           clickable = {()=>true}
           nag = {()=>{}}
           setters = {asyncSetters}

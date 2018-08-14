@@ -1,0 +1,11 @@
+.messagebar__div__show {
+  visibility : inherit
+}
+
+.messagebar__div__hide {
+  visibility : hidden
+}
+
+.messagebar__message {
+  background-color: red;
+}

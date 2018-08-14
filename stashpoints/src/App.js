@@ -1,11 +1,9 @@
 
 import React, { Component } from 'react';
-import Form from './Form';
+import {Form, getUrl} from './Form';
 import ResponseModal from './ResponseModal';
 import {interpretResponse} from './helpers'
 import './App.css';
-
-const getUrl = 'https://api-staging.stasher.com/v1/stashpoints';
 
 class App extends Component {
   constructor () {
@@ -14,11 +12,6 @@ class App extends Component {
       hasActiveResponse : false
     }
   };
-
-  asyncSetters = {
-    // onSuccess : result => {console.log(result); this.setState ({data : interpretResponse(result)})},
-    onPostRequestFail : err => {console.log (err); this.setState ({message : 'Something went wrong. Please try again in '+Math.floor(Math.random()*10)+ ' minutes'})}
-  }
 
   clearResponse = () => {
     this.setState ({hasActiveResponse : false})
@@ -33,13 +26,8 @@ class App extends Component {
 
         <Form
           action = {'get'}
-          asyncSetters = {this.asyncSetters}
+          // asyncSetters = {this.asyncSetters}
         />
-
-         <ResponseModal
-           show = {this.state.hasActiveResponse}
-           OnClickAway = {this.clearResponse}
-         />
 
       </div>
     );

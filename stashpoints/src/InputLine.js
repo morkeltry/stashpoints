@@ -22,9 +22,7 @@ class InputLine extends Component {
             placeholder={this.props.placeholder || ''}
             noValidate
             onChange={
-              (this.props.updateErrors) ?
-              event => {this.handleChange (event, this.props.updateErrors, this.props.updateValues)} :
-              ()=>{}                                //if no setter to set errors/ values, then don;t validate
+              event => {this.handleChange (event, this.props.updateErrors, this.props.updateValues)}
             }
           />
       </div>

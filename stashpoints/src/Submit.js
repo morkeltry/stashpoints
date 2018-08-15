@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {interpretResponse} from './helpers';
+import { encType } from './constants';
 import './Submit.css';
 
 const headers = {
-    'Content-Type': 'multipart/form-data',     //Uncomment to DECLARE as multipart (which doesn't mean that it really is multipart! - It's probably still JSON)
-    // 'Content-Type': 'application/json',         //Uncomment to provide JSON string
+    'Content-Type': encType,
     'Accept': 'text/html'
 }
-
 
 class Submit extends Component {
 
@@ -15,6 +14,8 @@ class Submit extends Component {
   //ie browser will attempt to load url and display it in address bar
   submitHandler = (ev, url, setters)=> {
     ev.preventDefault();
+
+    console.log('Will get from: ',url);
     fetch (url, {headers: headers})
       .then (response => {
         console.log('body:',response.body);

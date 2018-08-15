@@ -4,9 +4,8 @@ import InputLine from './InputLine';
 import Submit from './Submit';
 import MessageBar from './MessageBar';
 import ResponseModal from './ResponseModal';
-import {interpretResponse} from './helpers';
-
-const getUrl = 'https://api-staging.stasher.com/v1/stashpoints';
+import {interpretResponse, formatResponse} from './helpers';
+import { getUrl, encType } from './constants';
 
 class Form extends Component {
   constructor () {
@@ -15,8 +14,7 @@ class Form extends Component {
     this.state = {
       message : false,
       respData : '',
-      formData : {},
-      consent : false,    // no input to consent field shoudl not block submission;
+      formData : {}
     }
   };
 
@@ -40,12 +38,6 @@ class Form extends Component {
     ['by_bags_last_30_days', 'by_bags_last_30_days', 'by_bags_last_30_days', 'asc or desc']
   ];
 
-  hashOf = password => password;
-
-  //Yes, It's hacky :(
-  //An alternative would be to place values and erros objects in the state, but then .setState() wouldn't work as prettily.
-  // Better would be refactoring so that errors are stored in App state, and the ValidationErrorMessage is also rendered from App.
-  //  Oh, if only there were enough time!
   updateFormValue= (field, value)=> {
     const newState = this.state.formData;
     newState[field+'value'] = value;
@@ -56,7 +48,7 @@ class Form extends Component {
 
   asyncSetters = {
     onSuccess : result => {
-      console.log(result);
+      console.log('>>>',result);
       this.setState ({respData : interpretResponse(result)})
       this.setState ({hasActiveResponse : true})
     },
@@ -72,7 +64,6 @@ class Form extends Component {
     let dataQueryString = '';
 console.log(formData);
     this.formFields.forEach (field => {
-console.log('trying field',field[1]);
       if (formData[field[1]+'value']) {
         console.log(formData[field[1]+'value']);
         dataObj[field[1]] = formData[field[1]+'value'];
@@ -87,8 +78,6 @@ console.log('postable currently =',dataQueryString.replace('&','?'));
 
 
   render() {
-    //Quicky hacky way to have network message shown in error display, without refactoring it back up into App.js
-
     let asyncSetters = this.props.asyncSetters || this.asyncSetters;
     asyncSetters.onRequestFail = err => {
       console.log (err); this.setState ({message : "Something went wrong..."})}
@@ -107,7 +96,7 @@ console.log('postable currently =',dataQueryString.replace('&','?'));
             type = {type}
             placeholder = {placeholder}
             required = {!!required}
-            updateErrors = {this.updateValidationErrorState}       // setters
+            updateErrors = {()=>{}}       // setters
             updateValues = {this.updateFormValue}
             errorState = {this.state[fieldContents[1]]}     //field name, store error as property named after it
         />})}
@@ -121,14 +110,16 @@ console.log('postable currently =',dataQueryString.replace('&','?'));
           setters = {asyncSetters}
          />
 
-       <MessageBar
-         message = {JSON.stringify(this.state.respData)}
-       />
+         <MessageBar
+           message = {formatResponse(this.state.message || this.state.respData) //NB will be moved to ResponseModal once working
+           }
+         />
+
 
         <ResponseModal
           show = {this.state.hasActiveResponse}
           OnClickAway = {this.clearResponse}
-          data = {this.state.respData}
+          data = {formatResponse(this.state.respData)}
         />
 
        </form>

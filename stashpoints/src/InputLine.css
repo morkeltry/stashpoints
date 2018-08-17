@@ -1,0 +1,26 @@
+.flex-container {
+  width : 80vw;
+  display : flex;
+  flex-direction : row;
+  align-items: center;
+  margin : 0.15rem;
+  border-radius: 1rem;
+}
+
+.flex-child-left {
+  width : 40vw;
+  margin-right: 1.5rem;
+  text-align : right;
+}
+
+.fieldname-text {
+  font-weight: 400;
+  text-shadow: 0 0 5px white;
+}
+
+.flex-child-right {
+  width : 60%;
+  margin-left: auto;
+  align : left;
+  text-align:center;
+}

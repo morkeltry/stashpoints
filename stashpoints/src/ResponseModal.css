@@ -1,3 +1,11 @@
 .modal__hide {
   visibility : hidden
 }
+
+.modal__show {
+  white-space : pre-wrap
+}
+
+.bordered {
+  border : 1px solid blue
+}

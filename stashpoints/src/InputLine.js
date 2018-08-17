@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
+import './InputLine.css';
 
+ // InputLine produces fieldname text and input elements left and right aligned to a vertical.
 class InputLine extends Component {
-
 
   handleChange (event, updateErrors, updateFormValue) {
     const node = event.target;
     updateFormValue (node.name, node.value);
-    if (updateErrors)
-      this.validate (node, updateErrors);      //if no setter to set errors/ values, then don't validate
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {interpretResponse} from './helpers';
+// import {interpretResponse} from './helpers';
 import { encType } from './constants';
 import './Submit.css';
 
@@ -9,18 +9,16 @@ const headers = {
 }
 
 class Submit extends Component {
-
-  //functionality incomplete - commenting out preventDefault() allows form submission by default behaviour
-  //ie browser will attempt to load url and display it in address bar
+  // functionality incomplete - commenting out preventDefault() allows form submission by default behaviour
+  // ie browser will attempt to request to url and display it in address bar
+  // useful for finding querystrings, but they may not be the same querystrings passed here as url
   submitHandler = (ev, url, setters)=> {
     ev.preventDefault();
 
-    console.log('Will get from: ',url);
     fetch (url, {headers: headers})
       .then (response => {
         console.log('body:',response.body);
           return response.json();
-
       })
       .then (this.setter || setters.onSuccess)
       .catch (setters.onPostRequestFail)

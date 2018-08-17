@@ -10,10 +10,9 @@ import { getUrl, encType } from './constants';
 class Form extends Component {
   constructor () {
     super ();
-    //in state, true prevents submission, false reports no errors, message=error specifies the error
     this.state = {
       message : false,
-      respData : '',
+      respData : [],
       formData : {}
     }
   };
@@ -46,32 +45,31 @@ class Form extends Component {
     this.setState (newState);
   }
 
+// This is the correct place to define the behaviour of the Form once a reponse is received.
+// It can be overridden by passing an asyncSetters object in props, or by overriding by child.
   asyncSetters = {
     onSuccess : result => {
-      console.log('>>>',result);
-      this.setState ({respData : interpretResponse(result)})
+      this.setState ({respData : interpretResponse(result, true)})
       this.setState ({hasActiveResponse : true})
     },
 
     onRequestFail : err =>
       {console.log (err);
-      this.setState ({message : 'Something went wrong. Please try again in '+Math.floor(Math.random()*10)+ ' minutes'})
+      this.setState ({message : 'Something went wrong...'})
     }
   }
 
+  // Create a query string based on current form state
   bundleData = formData => {
     const dataObj = {};
     let dataQueryString = '';
-console.log(formData);
     this.formFields.forEach (field => {
       if (formData[field[1]+'value']) {
         console.log(formData[field[1]+'value']);
         dataObj[field[1]] = formData[field[1]+'value'];
         dataQueryString += `&${field[1]}=${formData[field[1]+'value']}`;
-
       }
     });
-console.log('postable currently =',dataQueryString.replace('&','?'));
     return dataQueryString.replace('&','?');
     // return JSON.stringify(dataObj);
   }
@@ -79,13 +77,11 @@ console.log('postable currently =',dataQueryString.replace('&','?'));
 
   render() {
     let asyncSetters = this.props.asyncSetters || this.asyncSetters;
-    asyncSetters.onRequestFail = err => {
-      console.log (err); this.setState ({message : "Something went wrong..."})}
 
     return (
       <div>
       <form className="form-flex form-styled"  action={getUrl} method="get" encType="multipart/form-data">
-        <p className="form-header"> FORMFORMFORM </p>
+        <p className="form-header"> Enter criteria </p>
 
         {this.formFields.map (fieldContents => {
           const [title, name, type, placeholder, required] = fieldContents;
@@ -96,13 +92,13 @@ console.log('postable currently =',dataQueryString.replace('&','?'));
             type = {type}
             placeholder = {placeholder}
             required = {!!required}
-            updateErrors = {()=>{}}       // setters
+            updateErrors = {()=>{}}                 // setters for specific error logging and validation functionality - unused here.
             updateValues = {this.updateFormValue}
             errorState = {this.state[fieldContents[1]]}     //field name, store error as property named after it
         />})}
 
         <Submit
-          title = 'Do Submit'
+          title = 'Find me stashpoints!'
           action = {getUrl}
           query = {this.bundleData(this.state.formData)}
           clickable = {()=>true}
@@ -111,15 +107,13 @@ console.log('postable currently =',dataQueryString.replace('&','?'));
          />
 
          <MessageBar
-           message = {formatResponse(this.state.message || this.state.respData) //NB will be moved to ResponseModal once working
-           }
+           message = {this.state.message}
          />
-
 
         <ResponseModal
           show = {this.state.hasActiveResponse}
           OnClickAway = {this.clearResponse}
-          data = {formatResponse(this.state.respData)}
+          data = {interpretResponse (this.state.respData)}
         />
 
        </form>

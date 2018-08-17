@@ -1,0 +1,17 @@
+.data-item__table {
+  /* border: solid lightblue 1px; */
+  list-style-type: none;
+}
+
+.data-item__list {
+  /* border: solid blue 1px; */
+  list-style-type: none;
+}
+
+.data-item__any--odd {
+  background-color: #FFF9F4
+}
+
+.data-item__any--even {
+  background-color: #FFFAF8
+}
